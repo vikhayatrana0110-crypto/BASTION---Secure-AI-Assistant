@@ -38,6 +38,8 @@ jobs:
       
       - run: uv sync --locked --extra web
 
+      - run: psql "postgresql://bastion_owner:bastion_owner@localhost:5432/bastion" -v ON_ERROR_STOP=1 -f scripts/create_roles.sql
+
       - run: uv run ruff check .
 
       - run: uv run pytest
