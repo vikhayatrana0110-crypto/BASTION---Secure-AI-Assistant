@@ -27,7 +27,12 @@ def main() -> int:
                 print(f"skip    {path.name}")
                 continue
 
-            conn.execute(path.read_text())
+            sql = path.read_text()
+            if not sql.strip():
+                print(f"empty   {path.name} - is the file saved?")
+                return 1
+
+            conn.execute(sql)
             conn.execute("insert into schema_migrations (filename) values (%s)", (path.name,))
             conn.commit()
             print(f"applied {path.name}")
