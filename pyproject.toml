@@ -9,7 +9,9 @@ dependencies = [
     "pydantic-settings>=2.4",
     "psycopg[binary]>=3.2",
     "psycopg-pool>=3.2",
-    "argon2-cffi>=25.1"
+    "argon2-cffi>=25.1",    
+    "argon2-cffi>=25.1",
+    "pyjwt>=2.14"
 ]
 
 [project.optional-dependencies]
