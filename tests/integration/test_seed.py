@@ -12,8 +12,22 @@ PASSWORD = "seed-test-password"
 
 @pytest.fixture
 def seeded():
+    emails = [email for email, *_ in PERSONAS]
+
     with psycopg.connect(get_settings().database_url_owner) as conn:
+        before = conn.execute(
+            "select email, password_hash from users where email = any(%s)", (emails,)
+        ).fetchall()
         seed_personas(conn, PASSWORD)
+        conn.commit()
+
+    yield
+
+    with psycopg.connect(get_settings().database_url_owner) as conn:
+        for email, password_hash in before:
+            conn.execute(
+                "update users set password_hash = %s where email = %s", (password_hash, email)
+            )
         conn.commit()
 
 
